@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,13 +16,28 @@
         android:theme="@style/Theme.MyApplication"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity3"
+            android:name=".User_viewer"
             android:exported="false" />
         <activity
-            android:name=".MainActivity2"
+            android:name=".MainActivity6I"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Admin"
+            android:exported="false" />
+        <activity
+            android:name=".Less_edit"
+            android:exported="false" />
+        <activity
+            android:name=".Lesson_view"
+            android:exported="false" />
+        <activity
+            android:name=".Less_plus"
+            android:exported="false" />
+        <activity
+            android:name=".Home"
+            android:exported="false" />
+        <activity
+            android:name=".Reg_log"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

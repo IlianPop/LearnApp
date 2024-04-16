@@ -24,14 +24,14 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class MainActivity extends AppCompatActivity {
+public class Reg_log extends AppCompatActivity {
     private EditText mail, password, namet;
-    public DatabaseReference db;
+    public DatabaseReference db, db2;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.reg_log);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void init(){
         db = FirebaseDatabase.getInstance().getReference("User");
+        db2 = FirebaseDatabase.getInstance().getReference("Black");
         mail = findViewById(R.id.mail);
         password = findViewById(R.id.password);
         namet = findViewById(R.id.nametext);
@@ -54,18 +55,31 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     if(!snapshot.exists()){
-                        Users user = new Users(namet.getText().toString(), mail.getText().toString(), password.getText().toString(), db.getKey());
-                        db.push().setValue(user);
-                        Toast.makeText(getApplicationContext(), "Successfully", Toast.LENGTH_SHORT).show();
-                        mail.setText("");
-                        password.setText("");
-                        namet.setText("");
+                        Query query1 = db2.orderByChild("mail").equalTo(mail.getText().toString());
+                        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                if(!snapshot.exists()){
+                                    User user = new User(namet.getText().toString(), mail.getText().toString(), password.getText().toString(), db.getKey());
+                                    db.push().setValue(user);
+                                    Toast.makeText(getApplicationContext(), "Successfully", Toast.LENGTH_SHORT).show();
+                                    mail.setText("");
+                                    password.setText("");
+                                    namet.setText("");
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(), "This address is blocked", Toast.LENGTH_SHORT).show();
+                                }
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
                     }
                     else{
-                        Toast.makeText(getApplicationContext(), "the mail was already registered", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "The mail was already registered", Toast.LENGTH_SHORT).show();
                     }
                 }
-
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
 
@@ -82,7 +96,13 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(snapshot.exists()){
-                    Intent intent = new Intent(MainActivity.this, MainActivity2.class);
+                    User user=new User();
+                    for(DataSnapshot snapshot1: snapshot.getChildren()){
+                        user=snapshot1.getValue(User.class);
+                    }
+                    Intent intent = new Intent(Reg_log.this, Home.class);
+                    intent.putExtra("User_name", user.getName());
+                    intent.putExtra("User_mail", user.getMail());
                     startActivity(intent);
                 }
                 else{

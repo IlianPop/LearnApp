@@ -1,14 +1,44 @@
 package com.example.myapplication;
 
 public class Lesson {
-    private String theme, goal, description, url, id;
+    public Lesson() {
+    }
 
-    public Lesson(String theme, String goal, String description, String url, String id) {
+    private String theme, goal, description, url, id, author_mail, author_name, search_name;
+
+    public Lesson(String theme, String goal, String description, String url, String id, String author_mail, String author_name) {
         this.theme = theme;
         this.goal = goal;
         this.description = description;
         this.url = url;
         this.id = id;
+        this.author_mail=author_mail;
+        this.author_name=author_name;
+        this.search_name=theme.toUpperCase();
+    }
+
+    public String getSearch_name() {
+        return search_name;
+    }
+
+    public void setSearch_name(String search_name) {
+        this.search_name = search_name;
+    }
+
+    public String getAuthor_mail() {
+        return author_mail;
+    }
+
+    public void setAuthor_mail(String author_mail) {
+        this.author_mail = author_mail;
+    }
+
+    public String getAuthor_name() {
+        return author_name;
+    }
+
+    public void setAuthor_name(String author_name) {
+        this.author_name = author_name;
     }
 
     public String getTheme() {

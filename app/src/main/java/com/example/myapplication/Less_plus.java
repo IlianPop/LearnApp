@@ -19,14 +19,15 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity3 extends AppCompatActivity {
+public class Less_plus extends AppCompatActivity {
     public DatabaseReference db;
+    private String name, mail;
     public EditText theme, goal, description, url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
-        setContentView(R.layout.activity_main3);
+        setContentView(R.layout.less_plus);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
@@ -40,15 +41,23 @@ public class MainActivity3 extends AppCompatActivity {
         goal = findViewById(R.id.goaltext);
         description = findViewById(R.id.descriptiontext);
         url = findViewById(R.id.urltext);
+        Bundle i = getIntent().getExtras();
+        mail = i.getString("User_mail");
+        name = i.getString("User_name");
     }
     public void plus(View view){
         Query query = db.orderByChild("theme").equalTo(theme.getText().toString());
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()){
-                    Lesson lesson = new Lesson(theme.getText().toString(), goal.getText().toString(), description.getText().toString(), url.getText().toString(), db.getKey());
-                    db.push().setValue(lesson);
+                if(!snapshot.exists() || !theme.getText().toString().contains("User: ")){
+                    if(url.getText().toString().matches("^(https?|ftp)://.*$")) {
+                        Lesson lesson = new Lesson(theme.getText().toString(), goal.getText().toString(), description.getText().toString(), url.getText().toString(), db.getKey(), mail, name);
+                        db.push().setValue(lesson);
+                    }
+                    else{
+                        Toast.makeText(getApplicationContext(), "Not a link", Toast.LENGTH_SHORT).show();
+                    }
                 }
                 else{
                     Toast.makeText(getApplicationContext(), "There is already such a theme", Toast.LENGTH_SHORT).show();
@@ -60,5 +69,6 @@ public class MainActivity3 extends AppCompatActivity {
 
             }
         });
+        finish();
     }
 }
