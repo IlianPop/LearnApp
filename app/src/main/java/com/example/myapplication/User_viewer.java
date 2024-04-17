@@ -71,13 +71,11 @@ public class User_viewer extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshot1:snapshot.getChildren()){
-                    ViewGroup group1 = (ViewGroup) button1.getParent();
-                    ViewGroup group2 = (ViewGroup) button2.getParent();
                     if(!snapshot1.getValue(User.class).getAdmin().equals("2")){
-                        group1.removeView(button1);
+                        button1.setVisibility(View.GONE);
                     }
-                    if(!snapshot1.getValue(User.class).getAdmin().equals("1")&&!snapshot1.getValue(User.class).getAdmin().equals("2")){
-                        group2.removeView(button2);
+                    if(snapshot1.getValue(User.class).getAdmin().equals("0")){
+                        button2.setVisibility(View.GONE);
                     }
                 }
             }

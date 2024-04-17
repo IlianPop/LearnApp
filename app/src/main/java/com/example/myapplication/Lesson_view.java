@@ -28,7 +28,7 @@ public class Lesson_view extends AppCompatActivity {
     String name, mail, author_mail;
     TextView theme, goal, description, author;
     WebView veb;
-    DatabaseReference db;
+    DatabaseReference db, db1;
     Button button;
 
     @Override
@@ -57,10 +57,12 @@ public class Lesson_view extends AppCompatActivity {
         author=findViewById(R.id.textView4);
         description=findViewById(R.id.textView3);
         db = FirebaseDatabase.getInstance().getReference("Lesson");
+        db1 = FirebaseDatabase.getInstance().getReference("User");
         Bundle i = getIntent().getExtras();
         name = i.getString("inf");
         mail = i.getString("User_mail");
         Lesson less = new Lesson();
+
         Query query = db.orderByChild("theme").equalTo(name);
         query.addValueEventListener(new ValueEventListener() {
             @Override
@@ -82,8 +84,7 @@ public class Lesson_view extends AppCompatActivity {
                     webView.getSettings().setJavaScriptEnabled(true);
                     webView.setWebChromeClient(new WebChromeClient());
                     if(!author_mail.equals(mail)) {
-                        ViewGroup parent = (ViewGroup) button.getParent();
-                        parent.removeView(button);
+                        button.setVisibility(View.GONE);
                     }
                 }
             }
@@ -93,7 +94,22 @@ public class Lesson_view extends AppCompatActivity {
 
             }
         });
+        Query query1 = db1.orderByChild("mail").equalTo(mail);
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot snapshot1:snapshot.getChildren()){
+                    if(!snapshot1.getValue(User.class).getAdmin().equals("0")){
+                        button.setVisibility(View.VISIBLE);
+                    }
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
     public void author(View view){
         Intent i = new Intent(Lesson_view.this, User_viewer.class);

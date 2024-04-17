@@ -98,9 +98,9 @@ public class Home extends AppCompatActivity {
                     Intent i = new Intent(Home.this, User_viewer.class);
                     i.putExtra("User_name", name);
                     i.putExtra("User_mail", mail);
-                    String name1 ="";
                     String mail1 = listData.get(position);
-                    i.putExtra("inf", mail1.split(" ")[1]);
+                    String h1 = mail1.split(" ")[1];
+                    i.putExtra("inf", h1);
                     startActivity(i);
                 }
             }
