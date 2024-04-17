@@ -56,11 +56,11 @@ public class Less_plus extends AppCompatActivity {
                         db.push().setValue(lesson);
                     }
                     else{
-                        Toast.makeText(getApplicationContext(), "Not a link", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Не посилання", Toast.LENGTH_SHORT).show();
                     }
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "There is already such a theme", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Така тема вже існує", Toast.LENGTH_SHORT).show();
                 }
             }
 

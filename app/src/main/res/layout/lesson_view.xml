@@ -52,9 +52,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginEnd="28dp"
+        android:layout_marginEnd="23dp"
         android:onClick="Edit"
-        android:text="Edit"
+        android:text="Редагувати"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/button9" />
 
@@ -76,7 +76,7 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="23dp"
         android:onClick="author"
-        android:text="Author"
+        android:text="Автор"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

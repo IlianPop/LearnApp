@@ -62,13 +62,13 @@ public class Reg_log extends AppCompatActivity {
                                 if(!snapshot.exists()){
                                     User user = new User(namet.getText().toString(), mail.getText().toString(), password.getText().toString(), db.getKey());
                                     db.push().setValue(user);
-                                    Toast.makeText(getApplicationContext(), "Successfully", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Готово", Toast.LENGTH_SHORT).show();
                                     mail.setText("");
                                     password.setText("");
                                     namet.setText("");
                                 }
                                 else{
-                                    Toast.makeText(getApplicationContext(), "This address is blocked", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getApplicationContext(), "Ця адреса заблокована", Toast.LENGTH_SHORT).show();
                                 }
                             }
                             @Override
@@ -77,7 +77,7 @@ public class Reg_log extends AppCompatActivity {
                         });
                     }
                     else{
-                        Toast.makeText(getApplicationContext(), "The mail was already registered", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Ця пошта вже зареєстрована", Toast.LENGTH_SHORT).show();
                     }
                 }
                 @Override
@@ -87,7 +87,7 @@ public class Reg_log extends AppCompatActivity {
             });
         }
         else {
-            Toast.makeText(getApplicationContext(), "incorrect data", Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(), "Некоректні дані", Toast.LENGTH_SHORT).show();
         }
     }
     public void signin(View view){
@@ -106,7 +106,7 @@ public class Reg_log extends AppCompatActivity {
                     startActivity(intent);
                 }
                 else{
-                    Toast.makeText(getApplicationContext(), "incorect data", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Некоректні дані", Toast.LENGTH_SHORT).show();
                 }
             }
 
