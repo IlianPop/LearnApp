@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,7 +32,7 @@ import java.util.List;
 
 public class User_viewer extends AppCompatActivity {
     private DatabaseReference db, db2, db3;
-    private Button button1, button2;
+    private ImageButton button1, button2;
     private TextView name_view, mail_view;
     public String name, mail, inf, bool="0";
     private ListView listView;

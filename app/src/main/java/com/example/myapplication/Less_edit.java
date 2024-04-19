@@ -53,7 +53,8 @@ public class Less_edit extends AppCompatActivity {
                     theme1.setText(lesson.getTheme());
                     goal.setText(lesson.getGoal());
                     description.setText(lesson.getDescription());
-                    url.setText(lesson.getUrl());
+                    String ewq = "https://youtu.be/"+lesson.getUrl();
+                    url.setText(ewq);
                     author_name=lesson.getAuthor_name();
                     author_mail=lesson.getAuthor_mail();
                 }
@@ -68,12 +69,17 @@ public class Less_edit extends AppCompatActivity {
     public void save(View view){
         if(url.getText().toString().matches("^(https?|ftp)://.*$")) {
             Query query = db.orderByChild("theme").equalTo(theme);
-            query.addValueEventListener(new ValueEventListener() {
+            query.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                        Lesson lesson = new Lesson(theme1.getText().toString(), goal.getText().toString(), description.getText().toString(), url.getText().toString(), db.getKey(), author_mail, author_name);
-                        snapshot1.getRef().setValue(lesson);
+                        String[]urls=url.getText().toString().split("/");
+                        String ewq = urls[3];
+                        if(ewq.contains("?")) {
+                            ewq = ewq.split("\\?")[0];
+                        }
+                        Lesson lesson = new Lesson(theme1.getText().toString(), goal.getText().toString(), description.getText().toString(), ewq, db.getKey(), author_mail, author_name, "");
+                        snapshot1.getRef().setValue(Lesson.class);
                         finish();
                     }
                 }

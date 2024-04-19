@@ -7,7 +7,10 @@ import android.view.ViewGroup;
 import android.webkit.WebChromeClient;
 import android.webkit.WebView;
 import android.widget.Button;
+import android.widget.FrameLayout;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -22,14 +25,18 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.YouTubePlayer;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.listeners.AbstractYouTubePlayerListener;
+import com.pierfrancescosoffritti.androidyoutubeplayer.core.player.views.YouTubePlayerView;
 
 public class Lesson_view extends AppCompatActivity {
+    YouTubePlayerView youTubePlayerView;
     WebView webView;
     String name, mail, author_mail;
     TextView theme, goal, description, author;
     WebView veb;
     DatabaseReference db, db1;
-    Button button;
+    ImageButton button;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,8 +57,8 @@ public class Lesson_view extends AppCompatActivity {
         finish();
     }
     public void init(){
+        youTubePlayerView = findViewById(R.id.ytv);
         button=findViewById(R.id.button4);
-        webView=findViewById(R.id.web);
         theme=findViewById(R.id.textView);
         goal=findViewById(R.id.textView2);
         author=findViewById(R.id.textView4);
@@ -76,13 +83,13 @@ public class Lesson_view extends AppCompatActivity {
                     description.setText(les.getDescription());
                     author_mail=les.getAuthor_mail();
                     String url1=les.getUrl();
-                    String[]urls=url1.split("/");
-                    String video = "<iframe width=\"100%\" height=\"100%\" src=\"https://www.youtube.com/embed/";
-                    video+=urls[3];
-                    video+="title=\"YouTube video player\" frameborder=\"0\" allow=\"accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share\" referrerpolicy=\"strict-origin-when-cross-origin\" allowfullscreen></iframe>";
-                    webView.loadData(video, "text/html", "utf-8");
-                    webView.getSettings().setJavaScriptEnabled(true);
-                    webView.setWebChromeClient(new WebChromeClient());
+                    getLifecycle().addObserver(youTubePlayerView);
+                    youTubePlayerView.addYouTubePlayerListener(new AbstractYouTubePlayerListener() {
+                        @Override
+                        public void onReady(@NonNull YouTubePlayer youTubePlayer) {
+                            youTubePlayer.loadVideo(url1, 0);
+                        }
+                    });
                     if(!author_mail.equals(mail)) {
                         button.setVisibility(View.GONE);
                     }

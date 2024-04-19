@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 public class Less_plus extends AppCompatActivity {
     public DatabaseReference db;
     private String name, mail;
-    public EditText theme, goal, description, url;
+    public EditText theme, goal, description, url, Aanswer, Banswer, Canswer;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,7 +52,10 @@ public class Less_plus extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(!snapshot.exists() || !theme.getText().toString().contains("User: ")){
                     if(url.getText().toString().matches("^(https?|ftp)://.*$")) {
-                        Lesson lesson = new Lesson(theme.getText().toString(), goal.getText().toString(), description.getText().toString(), url.getText().toString(), db.getKey(), mail, name);
+                        String[]urls=url.getText().toString().split("/");
+                        String ewq = urls[3];
+                        ewq = ewq.split("\\?")[0];
+                        Lesson lesson = new Lesson(theme.getText().toString(), goal.getText().toString(), description.getText().toString(), ewq, db.getKey(), mail, name, "");
                         db.push().setValue(lesson);
                     }
                     else{
