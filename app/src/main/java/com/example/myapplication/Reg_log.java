@@ -101,12 +101,10 @@ public class Reg_log extends AppCompatActivity {
                         user=snapshot1.getValue(User.class);
                     }
                     Intent intent = new Intent(Reg_log.this, Home.class);
+                    assert user != null;
                     intent.putExtra("User_name", user.getName());
                     intent.putExtra("User_mail", user.getMail());
                     startActivity(intent);
-                }
-                else{
-                    Toast.makeText(getApplicationContext(), "Некоректні дані", Toast.LENGTH_SHORT).show();
                 }
             }
 

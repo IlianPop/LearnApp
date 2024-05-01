@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -79,7 +80,7 @@ public class Less_edit extends AppCompatActivity {
                             ewq = ewq.split("\\?")[0];
                         }
                         Lesson lesson = new Lesson(theme1.getText().toString(), goal.getText().toString(), description.getText().toString(), ewq, db.getKey(), author_mail, author_name, "");
-                        snapshot1.getRef().setValue(Lesson.class);
+                        snapshot1.getRef().setValue(lesson);
                         finish();
                     }
                 }
@@ -106,5 +107,12 @@ public class Less_edit extends AppCompatActivity {
 
             }
         });
+
+    }
+    public void teste(View ciew){
+        Intent intent = new Intent(Less_edit.this, Test_edit.class);
+        intent.putExtra("author_mail", author_mail);
+        intent.putExtra("lesson_theme", theme);
+        startActivity(intent);
     }
 }

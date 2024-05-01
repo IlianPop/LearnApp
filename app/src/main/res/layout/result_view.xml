@@ -6,23 +6,23 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/_672310584_kalix_club_p_oboi_na_domashnii_ekran_oboi_4"
-    tools:context=".Home">
+    tools:context=".Result_view">
 
     <ListView
-        android:id="@+id/listview"
+        android:id="@+id/listview5"
         android:layout_width="409dp"
         android:layout_height="729dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="70dp"
+        android:layout_marginTop="60dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="1dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextText" />
+        app:layout_constraintTop_toBottomOf="@+id/editTextTextsearch" />
 
     <EditText
-        android:id="@+id/editTextText"
+        android:id="@+id/editTextTextsearch"
         android:layout_width="262dp"
         android:layout_height="53dp"
         android:layout_marginStart="52dp"
@@ -55,15 +55,4 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/button_res" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/floatingActionButton2"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="40dp"
-        android:layout_marginBottom="40dp"
-        android:clickable="true"
-        android:onClick="plus"
-        android:src="@drawable/button_plus"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/listview" />
 </androidx.constraintlayout.widget.ConstraintLayout>

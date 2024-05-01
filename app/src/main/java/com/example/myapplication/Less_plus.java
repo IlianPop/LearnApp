@@ -22,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 public class Less_plus extends AppCompatActivity {
     public DatabaseReference db;
     private String name, mail;
-    public EditText theme, goal, description, url, Aanswer, Banswer, Canswer;
+    public EditText theme, goal, description, url;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +42,7 @@ public class Less_plus extends AppCompatActivity {
         description = findViewById(R.id.descriptiontext);
         url = findViewById(R.id.urltext);
         Bundle i = getIntent().getExtras();
+        assert i != null;
         mail = i.getString("User_mail");
         name = i.getString("User_name");
     }

@@ -107,40 +107,42 @@ public class Home extends AppCompatActivity {
         });
     }
     public void search(View view){
-        String h = search.getText().toString();
-        Query query = db2.orderByChild("search_name").startAt(h.toUpperCase()).endAt(h.toUpperCase()+"\uf8ff").limitToFirst(20);
-        query.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listData.clear();
-                for (DataSnapshot snap : snapshot.getChildren()) {
-                    Lesson less = snap.getValue(Lesson.class);
-                    listData.add(less.getTheme());
+        if(!search.getText().toString().isEmpty()) {
+            String h = search.getText().toString();
+            Query query = db2.orderByChild("search_name").startAt(h.toUpperCase()).endAt(h.toUpperCase() + "\uf8ff").limitToFirst(20);
+            query.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    listData.clear();
+                    for (DataSnapshot snap : snapshot.getChildren()) {
+                        Lesson less = snap.getValue(Lesson.class);
+                        listData.add(less.getTheme());
+                    }
+                    arrayAdapter.notifyDataSetChanged();
                 }
-                arrayAdapter.notifyDataSetChanged();
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
-        Query query2 = db.orderByChild("mail").startAt(h).endAt(h+"\uf8ff").limitToFirst(20);
-        query2.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot snap : snapshot.getChildren()) {
-                    User user = snap.getValue(User.class);
-                    listData.add("User: " + user.getMail());
                 }
-                arrayAdapter.notifyDataSetChanged();
-            }
+            });
+            Query query2 = db.orderByChild("mail").startAt(h).endAt(h + "\uf8ff").limitToFirst(20);
+            query2.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot snap : snapshot.getChildren()) {
+                        User user = snap.getValue(User.class);
+                        listData.add("User: " + user.getMail());
+                    }
+                    arrayAdapter.notifyDataSetChanged();
+                }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-            }
-        });
+                }
+            });
+        }
     }
     public void back(View view){
         ValueEventListener valueEventListener = new ValueEventListener() {

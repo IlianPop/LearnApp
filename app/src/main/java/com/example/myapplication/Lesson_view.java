@@ -125,4 +125,10 @@ public class Lesson_view extends AppCompatActivity {
         i.putExtra("inf", author_mail);
         startActivity(i);
     }
+    public void test(View view){
+        Intent intent = new Intent(Lesson_view.this, Tester.class);
+        intent.putExtra("user", mail);
+        intent.putExtra("lesson_theme", name);
+        startActivity(intent);
+    }
 }

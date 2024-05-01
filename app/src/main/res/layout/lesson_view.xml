@@ -60,11 +60,11 @@
         android:id="@+id/button4"
         android:layout_width="123dp"
         android:layout_height="43dp"
-        android:layout_above="@+id/button9"
+        android:layout_above="@+id/imageButton8"
         android:layout_alignParentStart="true"
         android:layout_alignParentEnd="true"
-        android:layout_marginStart="144dp"
-        android:layout_marginEnd="144dp"
+        android:layout_marginStart="141dp"
+        android:layout_marginEnd="147dp"
         android:layout_marginBottom="1dp"
         android:background="@null"
         android:onClick="Edit"
@@ -97,5 +97,19 @@
         android:layout_alignParentEnd="true"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="35dp" />
+        android:layout_marginBottom="20dp" />
+
+    <ImageButton
+        android:id="@+id/imageButton8"
+        android:layout_width="wrap_content"
+        android:layout_height="43dp"
+        android:layout_above="@+id/button9"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true"
+        android:layout_marginStart="144dp"
+        android:layout_marginEnd="144dp"
+        android:layout_marginBottom="1dp"
+        android:background="@null"
+        android:onClick="test"
+        app:srcCompat="@drawable/button_teste" />
 </RelativeLayout>
