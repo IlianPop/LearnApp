@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.RadioButton;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
@@ -95,7 +96,22 @@ public class Tester extends AppCompatActivity {
             a.setText(tests.get(position).getA_answer());
             b.setText(tests.get(position).getB_answer());
             v.setText(tests.get(position).getV_answer());
-            a.setChecked(true);
+            switch(s.get(position)){
+                case "A":
+                    a.setChecked(true);
+                    b.setChecked(false);
+                    v.setChecked(false);
+                    break;
+                case "B":
+                    a.setChecked(false);
+                    b.setChecked(true);
+                    v.setChecked(false);
+                    break;
+                case "V":
+                    a.setChecked(false);
+                    b.setChecked(false);
+                    v.setChecked(true);
+            }
         }
     }
     public void left(View view){
@@ -130,17 +146,21 @@ public class Tester extends AppCompatActivity {
             }
         }
         s.add("0");
-        Result result = new Result(user, lesson_theme, Integer.toString(res), db2.getKey());
+        Result result = new Result(user, lesson_theme, Integer.toString(res), db2.getKey(), Integer.toString(tests.size()));
         Query query = db2.orderByChild("lesson_theme").equalTo(lesson_theme);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot snapshot1:snapshot.getChildren()){
-                    if(snapshot1.child("name").getValue(String.class).equals(user)){
-                        snapshot1.getRef().removeValue();
-                        db2.push().setValue(result);
+                boolean found = false;
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    if(dataSnapshot.child("name").getValue(String.class).equals(user)){
+                        dataSnapshot.getRef().setValue(result);
+                        found = true;
                         break;
                     }
+                }
+                if(!found){
+                    db2.push().setValue(result);
                 }
             }
             @Override

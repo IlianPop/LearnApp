@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -20,7 +21,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 public class Less_edit extends AppCompatActivity {
-    DatabaseReference db;
+    DatabaseReference db, db2, db3;
     String theme, author_name, author_mail;
     public EditText theme1, goal, description, url;
     @Override
@@ -43,6 +44,8 @@ public class Less_edit extends AppCompatActivity {
         description=findViewById(R.id.descriptiontext);
         url = findViewById(R.id.urltext);
         db = FirebaseDatabase.getInstance().getReference("Lesson");
+        db2 = FirebaseDatabase.getInstance().getReference("Test");
+        db3 = FirebaseDatabase.getInstance().getReference("Result");
         Bundle i = getIntent().getExtras();
         theme=i.getString("theme");
         Query query = db.orderByChild("theme").equalTo(theme);
@@ -68,29 +71,79 @@ public class Less_edit extends AppCompatActivity {
         });
     }
     public void save(View view){
-        if(url.getText().toString().matches("^(https?|ftp)://.*$")) {
-            Query query = db.orderByChild("theme").equalTo(theme);
-            query.addListenerForSingleValueEvent(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                        String[]urls=url.getText().toString().split("/");
-                        String ewq = urls[3];
-                        if(ewq.contains("?")) {
-                            ewq = ewq.split("\\?")[0];
-                        }
-                        Lesson lesson = new Lesson(theme1.getText().toString(), goal.getText().toString(), description.getText().toString(), ewq, db.getKey(), author_mail, author_name, "");
-                        snapshot1.getRef().setValue(lesson);
+        Query query2 = db.orderByChild("theme").equalTo(theme1.getText().toString());
+        query2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()) {
+                    if (url.getText().toString().matches("^(https?|ftp)://.*$")) {
+                        Query query = db.orderByChild("theme").equalTo(theme);
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                    String[] urls = url.getText().toString().split("/");
+                                    String ewq = urls[3];
+                                    if (ewq.contains("?")) {
+                                        ewq = ewq.split("\\?")[0];
+                                    }
+                                    Lesson lesson = new Lesson(theme1.getText().toString(), goal.getText().toString(), description.getText().toString(), ewq, db.getKey(), author_mail, author_name, "");
+                                    snapshot1.getRef().setValue(lesson);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                        Query query1 = db2.orderByChild("lesson_theme").equalTo(theme);
+                        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for(DataSnapshot snapshot1:snapshot.getChildren()){
+                                    Test test = snapshot1.getValue(Test.class);
+                                    test.setLesson_theme(theme1.getText().toString());
+                                    snapshot1.getRef().removeValue();
+                                    db2.push().setValue(test);
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                        Query query3 = db3.orderByChild("lesson_theme").equalTo(theme);
+                        query3.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for(DataSnapshot snapshot1:snapshot.getChildren()){
+                                    Result res = snapshot1.getValue(Result.class);
+                                    res.setLesson_theme(theme1.getText().toString());
+                                    snapshot1.getRef().removeValue();
+                                    db3.push().setValue(res);                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
                         finish();
                     }
+                    else {
+                        Toast.makeText(getApplicationContext(), "Не посилання", Toast.LENGTH_SHORT).show();
+                    }
                 }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
+                else {
+                    Toast.makeText(getApplicationContext(), "Назва зайнята", Toast.LENGTH_SHORT).show();
                 }
-            });
-        }
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
     }
     public void delete(View view){
         Query query = db.orderByChild("theme").equalTo(theme);
@@ -107,7 +160,34 @@ public class Less_edit extends AppCompatActivity {
 
             }
         });
+        Query query1 = db2.orderByChild("lesson_theme").equalTo(theme);
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot snapshot1:snapshot.getChildren()){
+                    snapshot1.getRef().removeValue();
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        Query query2 = db3.orderByChild("lesson_theme").equalTo(theme);
+        query2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot snapshot1:snapshot.getChildren()){
+                    snapshot1.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
     public void teste(View ciew){
         Intent intent = new Intent(Less_edit.this, Test_edit.class);

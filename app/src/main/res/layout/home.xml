@@ -55,13 +55,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/button_res" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
+    <ImageButton
         android:id="@+id/floatingActionButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="40dp"
-        android:clickable="true"
+        android:background="@null"
         android:onClick="plus"
         android:src="@drawable/button_plus"
         app:layout_constraintBottom_toBottomOf="parent"

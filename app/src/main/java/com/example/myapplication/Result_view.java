@@ -1,6 +1,9 @@
 package com.example.myapplication;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -16,6 +19,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -27,7 +31,7 @@ public class Result_view extends AppCompatActivity {
     private ListView listView;
     private ArrayAdapter<String> arrayAdapter;
     private List<String> listData;
-    private String user;
+    private String Lesson_theme;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,11 +44,36 @@ public class Result_view extends AppCompatActivity {
         });
         init();
         start();
+        on_itemlistener();
+    }
+    public void rest(View view){
+        start();
+    }
+    public void search(View view){
+        Query query = db.orderByChild("lesson_theme").equalTo(Lesson_theme).limitToLast(20);
+        query.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listData.clear();
+                for(DataSnapshot snap:snapshot.getChildren()){
+                    Result res = snap.getValue(Result.class);
+                    if(res.getName().contains(search.getText().toString())) {
+                        listData.add(res.getName());
+                    }
+                }
+                arrayAdapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
     private void init(){
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
-        user=bundle.getString("user");
+        Lesson_theme=bundle.getString("lesson_theme");
         db = FirebaseDatabase.getInstance().getReference("Result");
         search = findViewById(R.id.editTextTextsearch);
         listView = findViewById(R.id.listview5);
@@ -52,8 +81,21 @@ public class Result_view extends AppCompatActivity {
         arrayAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, listData);
         listView.setAdapter(arrayAdapter);
     }
+    public void on_itemlistener(){
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Intent i = new Intent(Result_view.this, Res.class);
+                i.putExtra("Lesson_theme", Lesson_theme);
+                String mail = listData.get(position);
+                i.putExtra("user", mail);
+                startActivity(i);
+            }
+        });
+    }
     public void start(){
-        ValueEventListener valueEventListener = new ValueEventListener() {
+        Query query = db.orderByChild("lesson_theme").equalTo(Lesson_theme).limitToLast(20);
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 listData.clear();
@@ -68,7 +110,6 @@ public class Result_view extends AppCompatActivity {
             public void onCancelled(@NonNull DatabaseError error) {
 
             }
-        };
-        db.limitToFirst(20).addValueEventListener(valueEventListener);
+        });
     }
 }

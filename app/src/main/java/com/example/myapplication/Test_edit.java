@@ -25,7 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Test_edit extends AppCompatActivity {
-    private DatabaseReference db;
+    private DatabaseReference db, db2;
     private RadioButton a, b, v;
     private EditText question, a_answer, b_answer, v_answer;
     private String author_mail, lesson_theme;
@@ -46,6 +46,7 @@ public class Test_edit extends AppCompatActivity {
     private void init(){
         tests = new ArrayList<>();
         db = FirebaseDatabase.getInstance().getReference("Test");
+        db2 = FirebaseDatabase.getInstance().getReference("Result");
         a=findViewById(R.id.radioButton);
         b=findViewById(R.id.radioButton2);
         position=0;
@@ -166,24 +167,29 @@ public class Test_edit extends AppCompatActivity {
         }
         Test test = new Test(question.getText().toString(), a_answer.getText().toString(), b_answer.getText().toString(), v_answer.getText().toString(), e, db.getKey(), author_mail, lesson_theme);
         tests.set(position, test);
-        Query query = db.orderByChild("lesson_theme").equalTo(lesson_theme);
-        query.addListenerForSingleValueEvent(new ValueEventListener() {
+
+        // Видаляємо всі тести з вказаною темою
+        Query deleteQuery = db.orderByChild("lesson_theme").equalTo(lesson_theme);
+        deleteQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot snapshot1: snapshot.getChildren()){
-                    snapshot1.getRef().removeValue();
+                for(DataSnapshot dataSnapshot : snapshot.getChildren()){
+                    dataSnapshot.getRef().removeValue();
                 }
+                // Додаємо нові тести
+                for(Test test11 : tests){
+                    if(!test11.getA_answer().isEmpty() && !test11.getB_answer().isEmpty() && !test11.getV_answer().isEmpty() && !test11.getQuestion().isEmpty()) {
+                        db.push().setValue(test11);
+                    }
+                }
+                finish();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+                // Обробка помилок
             }
         });
-        for(Test test11:tests){
-            if(!test11.getA_answer().isEmpty()&&!test11.getB_answer().isEmpty()&&!test11.getV_answer().isEmpty()&&!test11.getQuestion().isEmpty()) {
-                db.push().setValue(test11);
-            }
-        }
-        finish();
     }
     public void left(View view) {
         if (position > 0) {
@@ -231,6 +237,20 @@ public class Test_edit extends AppCompatActivity {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
+            }
+        });
+        Query query1 = db2.orderByChild("lesson_theme").equalTo(lesson_theme);
+        query1.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot snapshot1:snapshot.getChildren()){
+                    snapshot1.getRef().removeValue();
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
             }
         });
     }

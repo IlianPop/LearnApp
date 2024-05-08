@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class User_viewer extends AppCompatActivity {
-    private DatabaseReference db, db2, db3;
+    private DatabaseReference db, db2, db3, db4, db5;
     private ImageButton button1, button2;
     private TextView name_view, mail_view;
     public String name, mail, inf, bool="0";
@@ -67,6 +67,8 @@ public class User_viewer extends AppCompatActivity {
         db = FirebaseDatabase.getInstance().getReference("User");
         db2 = FirebaseDatabase.getInstance().getReference("Lesson");
         db3 = FirebaseDatabase.getInstance().getReference("Black");
+        db4 = FirebaseDatabase.getInstance().getReference("Test");
+        db5 = FirebaseDatabase.getInstance().getReference("Result");
         Query query4 = db.orderByChild("mail").equalTo(mail);
         query4.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -135,15 +137,16 @@ public class User_viewer extends AppCompatActivity {
             }
         });
     }
-    public void delete(View view){
+    public void delete(View view) {
         Query query1 = db2.orderByChild("author_mail").equalTo(inf);
         query1.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot snapshot1:snapshot.getChildren()){
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     snapshot1.getRef().removeValue();
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
@@ -152,10 +155,39 @@ public class User_viewer extends AppCompatActivity {
         query2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot snapshot1:snapshot.getChildren()) {
+                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
                     snapshot1.getRef().removeValue();
+                    Query query = db4.orderByChild("lesson_theme").equalTo(snapshot1.getValue(Lesson.class).getTheme());
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for(DataSnapshot snapshot11:snapshot.getChildren()){
+                                snapshot11.getRef().removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
+                    Query query2 = db5.orderByChild("lesson_theme").equalTo(snapshot1.getValue(Lesson.class).getTheme());
+                    query.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for(DataSnapshot snapshot11:snapshot.getChildren()){
+                                snapshot11.getRef().removeValue();
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
             }
