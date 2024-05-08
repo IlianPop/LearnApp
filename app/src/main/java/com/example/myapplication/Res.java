@@ -21,7 +21,7 @@ import com.google.firebase.database.ValueEventListener;
 public class Res extends AppCompatActivity {
     private TextView name, theme, result, rating;
     private EditText nResult;
-    private int Result, Rating;
+    private Double Result, Rating;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,6 +32,8 @@ public class Res extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+        init();
+        start();
     }
     private void init(){
         name = findViewById(R.id.textView8);
@@ -39,22 +41,26 @@ public class Res extends AppCompatActivity {
         result = findViewById(R.id.textView10);
         rating = findViewById(R.id.textView11);
         nResult = findViewById(R.id.editTextText6);
+    }
+    private void start(){
         Bundle bundle = getIntent().getExtras();
         assert bundle != null;
         String n = bundle.getString("user");
         String m = bundle.getString("lesson_theme");
-        Query query = FirebaseDatabase.getInstance().getReference("Result").orderByChild("lesson_theme").equalTo(m).orderByChild("name").equalTo(n);
+        Query query = FirebaseDatabase.getInstance().getReference("Result").orderByChild("lesson_theme").equalTo(m);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot snapshot1:snapshot.getChildren()){
-                    Result res = snapshot1.getValue(Result.class);
-                    Result = Integer.parseInt(res.getResult());
-                    Rating = Integer.parseInt(res.getRating());
-                    name.setText(res.getName());
-                    theme.setText(res.getLesson_theme());
-                    result.setText(Integer.toString(Result)+"/"+Integer.toString(Rating));
-                    rating.setText(result.getText().toString());
+                    if(snapshot1.getValue(Result.class).getName().equals(n)) {
+                        Result res = snapshot1.getValue(Result.class);
+                        Result = Double.parseDouble(res.getResult());
+                        Rating = Double.parseDouble(res.getRating());
+                        name.setText(res.getName());
+                        theme.setText(res.getLesson_theme());
+                        result.setText(Double.toString(Result) + "/" + Double.toString(Rating));
+                        rating.setText(result.getText().toString());
+                    }
                 }
             }
 
@@ -65,6 +71,8 @@ public class Res extends AppCompatActivity {
         });
     }
     public void translate(View view){
-        rating.setText(Integer.toString(Result/Rating*Integer.parseInt(nResult.getText().toString()))+"/"+nResult.getText().toString());
+        if(nResult.getText().toString().matches("-?\\d+(\\.\\d+)?")) {
+            rating.setText(Double.toString(Result / Rating * Double.parseDouble(nResult.getText().toString())) + "/" + Double.parseDouble(nResult.getText().toString()));
+        }
     }
 }

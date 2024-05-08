@@ -57,6 +57,7 @@ public class Result_view extends AppCompatActivity {
                 listData.clear();
                 for(DataSnapshot snap:snapshot.getChildren()){
                     Result res = snap.getValue(Result.class);
+                    assert res != null;
                     if(res.getName().contains(search.getText().toString())) {
                         listData.add(res.getName());
                     }
@@ -86,7 +87,7 @@ public class Result_view extends AppCompatActivity {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent i = new Intent(Result_view.this, Res.class);
-                i.putExtra("Lesson_theme", Lesson_theme);
+                i.putExtra("lesson_theme", Lesson_theme);
                 String mail = listData.get(position);
                 i.putExtra("user", mail);
                 startActivity(i);

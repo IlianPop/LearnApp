@@ -49,7 +49,7 @@ public class Test_edit extends AppCompatActivity {
         db2 = FirebaseDatabase.getInstance().getReference("Result");
         a=findViewById(R.id.radioButton);
         b=findViewById(R.id.radioButton2);
-        position=0;
+        position=1;
         v=findViewById(R.id.radioButton3);
         question=findViewById(R.id.editTextText5);
         a_answer=findViewById(R.id.editTextText2);
@@ -61,7 +61,7 @@ public class Test_edit extends AppCompatActivity {
         lesson_theme=bundle.getString("lesson_theme");
         tests.clear();
         Query query = db.orderByChild("lesson_theme").equalTo(lesson_theme);
-        query.addValueEventListener(new ValueEventListener() {
+        query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshot1:snapshot.getChildren()){
@@ -167,8 +167,6 @@ public class Test_edit extends AppCompatActivity {
         }
         Test test = new Test(question.getText().toString(), a_answer.getText().toString(), b_answer.getText().toString(), v_answer.getText().toString(), e, db.getKey(), author_mail, lesson_theme);
         tests.set(position, test);
-
-        // Видаляємо всі тести з вказаною темою
         Query deleteQuery = db.orderByChild("lesson_theme").equalTo(lesson_theme);
         deleteQuery.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -176,7 +174,6 @@ public class Test_edit extends AppCompatActivity {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()){
                     dataSnapshot.getRef().removeValue();
                 }
-                // Додаємо нові тести
                 for(Test test11 : tests){
                     if(!test11.getA_answer().isEmpty() && !test11.getB_answer().isEmpty() && !test11.getV_answer().isEmpty() && !test11.getQuestion().isEmpty()) {
                         db.push().setValue(test11);
@@ -187,12 +184,11 @@ public class Test_edit extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-                // Обробка помилок
             }
         });
     }
     public void left(View view) {
-        if (position > 0) {
+        if (position > 1) {
             String e = "A";
             if (b.isChecked()) {
                 e = "B";

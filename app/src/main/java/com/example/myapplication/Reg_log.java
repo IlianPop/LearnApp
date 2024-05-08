@@ -106,11 +106,12 @@ public class Reg_log extends AppCompatActivity {
                     intent.putExtra("User_mail", user.getMail());
                     startActivity(intent);
                 }
+                else{
+                    Toast.makeText(getApplicationContext(), "Невірні дані", Toast.LENGTH_SHORT).show();
+                }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
     }

@@ -96,21 +96,16 @@ public class Tester extends AppCompatActivity {
             a.setText(tests.get(position).getA_answer());
             b.setText(tests.get(position).getB_answer());
             v.setText(tests.get(position).getV_answer());
-            switch(s.get(position)){
-                case "A":
-                    a.setChecked(true);
-                    b.setChecked(false);
-                    v.setChecked(false);
-                    break;
+            switch (s.get(position)){
                 case "B":
-                    a.setChecked(false);
                     b.setChecked(true);
-                    v.setChecked(false);
                     break;
                 case "V":
-                    a.setChecked(false);
-                    b.setChecked(false);
                     v.setChecked(true);
+                    break;
+                default:
+                    a.setChecked(true);
+                    break;
             }
         }
     }
@@ -128,7 +123,17 @@ public class Tester extends AppCompatActivity {
             a.setText(tests.get(position).getA_answer());
             b.setText(tests.get(position).getB_answer());
             v.setText(tests.get(position).getV_answer());
-            a.setChecked(true);
+            switch (s.get(position)){
+                case "B":
+                    b.setChecked(true);
+                    break;
+                case "V":
+                    v.setChecked(true);
+                    break;
+                default:
+                    a.setChecked(true);
+                    break;
+            }
         }
     }
     public void result(View view){
