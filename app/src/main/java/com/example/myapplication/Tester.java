@@ -81,6 +81,7 @@ public class Tester extends AppCompatActivity {
 
             }
         });
+        a.setChecked(true);
     }
     public void right(View view){
         if(position<tests.size()-1) {

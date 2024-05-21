@@ -36,7 +36,7 @@ public class Lesson_view extends AppCompatActivity {
     TextView theme, goal, description, author;
     WebView veb;
     DatabaseReference db, db1;
-    ImageButton button;
+    ImageButton button, button2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +59,7 @@ public class Lesson_view extends AppCompatActivity {
     public void init(){
         youTubePlayerView = findViewById(R.id.ytv);
         button=findViewById(R.id.button4);
+        button2=findViewById(R.id.imageButton8);
         theme=findViewById(R.id.textView);
         goal=findViewById(R.id.textView2);
         author=findViewById(R.id.textView4);
@@ -69,7 +70,20 @@ public class Lesson_view extends AppCompatActivity {
         name = i.getString("inf");
         mail = i.getString("User_mail");
         Lesson less = new Lesson();
+        Query query2 = FirebaseDatabase.getInstance().getReference("Test").orderByChild("lesson_theme").equalTo(name);
+        query2.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(!snapshot.exists()){
+                    button2.setVisibility(View.GONE);
+                }
+            }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
         Query query = db.orderByChild("theme").equalTo(name);
         query.addValueEventListener(new ValueEventListener() {
             @Override

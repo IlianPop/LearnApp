@@ -22,6 +22,8 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 
 public class Test_edit extends AppCompatActivity {
@@ -49,7 +51,7 @@ public class Test_edit extends AppCompatActivity {
         db2 = FirebaseDatabase.getInstance().getReference("Result");
         a=findViewById(R.id.radioButton);
         b=findViewById(R.id.radioButton2);
-        position=1;
+        position=0;
         v=findViewById(R.id.radioButton3);
         question=findViewById(R.id.editTextText5);
         a_answer=findViewById(R.id.editTextText2);
@@ -65,12 +67,11 @@ public class Test_edit extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshot1:snapshot.getChildren()){
-                    tests.add(snapshot1.getValue(Test.class));
-                    question.setText(tests.get(1).getQuestion());
-                    a_answer.setText(tests.get(1).getA_answer());
-                    b_answer.setText(tests.get(1).getB_answer());
-                    v_answer.setText(tests.get(1).getV_answer());
-                    switch (tests.get(1).getAnswer()) {
+                    question.setText(snapshot1.getValue(Test.class).getQuestion());
+                    a_answer.setText(snapshot1.getValue(Test.class).getA_answer());
+                    b_answer.setText(snapshot1.getValue(Test.class).getB_answer());
+                    v_answer.setText(snapshot1.getValue(Test.class).getV_answer());
+                    switch (snapshot1.getValue(Test.class).getAnswer()) {
                         case "A":
                             a.setChecked(true);
                             b.setChecked(false);
@@ -87,7 +88,9 @@ public class Test_edit extends AppCompatActivity {
                             v.setChecked(true);
                             break;
                     }
+                    tests.add(snapshot1.getValue(Test.class));
                 }
+                Collections.reverse(tests);
             }
 
             @Override
@@ -95,10 +98,8 @@ public class Test_edit extends AppCompatActivity {
 
             }
         });
-        if(tests.isEmpty()){
-            Test test = new Test("", "", "", "", "A", "",  author_mail, lesson_theme);
-            tests.add(test);
-        }
+        Test test = new Test("", "", "", "", "A", "",  author_mail, lesson_theme);
+        tests.add(test);
     }
     public void right(View view){
         String e ="A";
@@ -188,7 +189,7 @@ public class Test_edit extends AppCompatActivity {
         });
     }
     public void left(View view) {
-        if (position > 1) {
+        if (position > 0) {
             String e = "A";
             if (b.isChecked()) {
                 e = "B";
@@ -249,5 +250,6 @@ public class Test_edit extends AppCompatActivity {
 
             }
         });
+        finish();
     }
 }

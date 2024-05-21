@@ -4,6 +4,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -21,7 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 public class Res extends AppCompatActivity {
     private TextView name, theme, result, rating;
     private EditText nResult;
-    private Double Result, Rating;
+    private int Result, Rating;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -54,11 +55,11 @@ public class Res extends AppCompatActivity {
                 for(DataSnapshot snapshot1:snapshot.getChildren()){
                     if(snapshot1.getValue(Result.class).getName().equals(n)) {
                         Result res = snapshot1.getValue(Result.class);
-                        Result = Double.parseDouble(res.getResult());
-                        Rating = Double.parseDouble(res.getRating());
+                        Result = Integer.parseInt(res.getResult());
+                        Rating = Integer.parseInt(res.getRating());
                         name.setText(res.getName());
                         theme.setText(res.getLesson_theme());
-                        result.setText(Double.toString(Result) + "/" + Double.toString(Rating));
+                        result.setText(Integer.toString(Result) + "/" + Integer.toString(Rating));
                         rating.setText(result.getText().toString());
                     }
                 }
@@ -72,7 +73,10 @@ public class Res extends AppCompatActivity {
     }
     public void translate(View view){
         if(nResult.getText().toString().matches("-?\\d+(\\.\\d+)?")) {
-            rating.setText(Double.toString(Result / Rating * Double.parseDouble(nResult.getText().toString())) + "/" + Double.parseDouble(nResult.getText().toString()));
+            rating.setText((int)(Math.round((double) (Result) / (double) Rating* Double.parseDouble(nResult.getText().toString()))) + "/" + nResult.getText().toString());
+        }
+        else{
+            Toast.makeText(getApplicationContext(), "Не число", Toast.LENGTH_SHORT).show();
         }
     }
 }
