@@ -56,7 +56,7 @@ public class Less_plus extends AppCompatActivity {
                         String[]urls=url.getText().toString().split("/");
                         String ewq = urls[3];
                         ewq = ewq.split("\\?")[0];
-                        Lesson lesson = new Lesson(theme.getText().toString(), goal.getText().toString(), description.getText().toString(), ewq, db.getKey(), mail, name, "");
+                        Lesson lesson = new Lesson(theme.getText().toString(), goal.getText().toString(), description.getText().toString(), ewq, db.getKey(), mail, name);
                         db.push().setValue(lesson);
                     }
                     else{

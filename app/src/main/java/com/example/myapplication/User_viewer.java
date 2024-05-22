@@ -74,11 +74,12 @@ public class User_viewer extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot snapshot1:snapshot.getChildren()){
-                    if(!snapshot1.getValue(User.class).getAdmin().equals("2")){
+                    if(snapshot1.getValue(User.class).getAdmin().equals("1")){
                         button1.setVisibility(View.GONE);
                     }
-                    if(snapshot1.getValue(User.class).getAdmin().equals("0")){
+                    if(snapshot1.getValue(User.class).getAdmin().equals("0")||mail.equals(inf)){
                         button2.setVisibility(View.GONE);
+                        button1.setVisibility(View.GONE);
                     }
                 }
             }

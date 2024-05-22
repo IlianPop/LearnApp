@@ -4,9 +4,9 @@ public class Lesson {
     public Lesson() {
     }
 
-    private String theme, goal, description, url, id, author_mail, author_name, search_name, tests;
+    private String theme, goal, description, url, id, author_mail, author_name, search_name;
 
-    public Lesson(String theme, String goal, String description, String url, String id, String author_mail, String author_name, String tests) {
+    public Lesson(String theme, String goal, String description, String url, String id, String author_mail, String author_name) {
         this.theme = theme;
         this.goal = goal;
         this.description = description;
@@ -15,17 +15,7 @@ public class Lesson {
         this.author_mail=author_mail;
         this.author_name=author_name;
         this.search_name=theme.toUpperCase();
-        this.tests = tests;
     }
-
-    public String getTests() {
-        return tests;
-    }
-
-    public void setTests(String tests) {
-        this.tests = tests;
-    }
-
     public String getSearch_name() {
         return search_name;
     }

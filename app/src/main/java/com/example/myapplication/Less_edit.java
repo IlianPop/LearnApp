@@ -75,68 +75,76 @@ public class Less_edit extends AppCompatActivity {
         query2.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if(!snapshot.exists()) {
-                    if (url.getText().toString().matches("^(https?|ftp)://.*$")) {
-                        Query query = db.orderByChild("theme").equalTo(theme);
-                        query.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for (DataSnapshot snapshot1 : snapshot.getChildren()) {
-                                    String[] urls = url.getText().toString().split("/");
-                                    String ewq = urls[3];
-                                    if (ewq.contains("?")) {
-                                        ewq = ewq.split("\\?")[0];
+                int ewq = 0;
+                String qwe = "";
+                for(DataSnapshot snapshot1:snapshot.getChildren()){
+                    ewq+=1;
+                    qwe = snapshot1.getValue(Lesson.class).getTheme();
+                }
+                if(ewq < 2) {
+                    if(qwe.equals(theme)|| qwe.equals("")) {
+                        if (url.getText().toString().matches("^(https?|ftp)://.*$")) {
+                            Query query = db.orderByChild("theme").equalTo(theme);
+                            query.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                        String[] urls = url.getText().toString().split("/");
+                                        String ewq = urls[3];
+                                        if (ewq.contains("?")) {
+                                            ewq = ewq.split("\\?")[0];
+                                        }
+                                        Lesson lesson = new Lesson(theme1.getText().toString(), goal.getText().toString(), description.getText().toString(), ewq, db.getKey(), author_mail, author_name);
+                                        snapshot1.getRef().setValue(lesson);
                                     }
-                                    Lesson lesson = new Lesson(theme1.getText().toString(), goal.getText().toString(), description.getText().toString(), ewq, db.getKey(), author_mail, author_name, "");
-                                    snapshot1.getRef().setValue(lesson);
                                 }
-                            }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
-                        Query query1 = db2.orderByChild("lesson_theme").equalTo(theme);
-                        query1.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for(DataSnapshot snapshot1:snapshot.getChildren()){
-                                    Test test = snapshot1.getValue(Test.class);
-                                    test.setLesson_theme(theme1.getText().toString());
-                                    snapshot1.getRef().removeValue();
-                                    db2.push().setValue(test);
                                 }
-                            }
+                            });
+                            Query query1 = db2.orderByChild("lesson_theme").equalTo(theme);
+                            query1.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                        Test test = snapshot1.getValue(Test.class);
+                                        test.setLesson_theme(theme1.getText().toString());
+                                        snapshot1.getRef().removeValue();
+                                        db2.push().setValue(test);
+                                    }
+                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
-                        Query query3 = db3.orderByChild("lesson_theme").equalTo(theme);
-                        query3.addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                for(DataSnapshot snapshot1:snapshot.getChildren()){
-                                    Result res = snapshot1.getValue(Result.class);
-                                    res.setLesson_theme(theme1.getText().toString());
-                                    snapshot1.getRef().removeValue();
-                                    db3.push().setValue(res);                                }
-                            }
+                                }
+                            });
+                            Query query3 = db3.orderByChild("lesson_theme").equalTo(theme);
+                            query3.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    for (DataSnapshot snapshot1 : snapshot.getChildren()) {
+                                        Result res = snapshot1.getValue(Result.class);
+                                        res.setLesson_theme(theme1.getText().toString());
+                                        snapshot1.getRef().removeValue();
+                                        db3.push().setValue(res);
+                                    }
+                                }
 
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
 
-                            }
-                        });
-                        finish();
+                                }
+                            });
+                            finish();
+                        }
                     }
                     else {
                         Toast.makeText(getApplicationContext(), "Не посилання", Toast.LENGTH_SHORT).show();
                     }
-                }
-                else {
+                } else {
                     Toast.makeText(getApplicationContext(), "Назва зайнята", Toast.LENGTH_SHORT).show();
                 }
             }
