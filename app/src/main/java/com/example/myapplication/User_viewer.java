@@ -205,11 +205,11 @@ public class User_viewer extends AppCompatActivity {
                     User user = snapshot1.getValue(User.class);
                     if(user.getAdmin().equals("0")){
                         user.setAdmin("1");
-                        Toast.makeText(getApplicationContext(), "User is now admin", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Користувач став адміном", Toast.LENGTH_SHORT).show();
                     }
                     else if(user.getAdmin().equals("1")){
                         user.setAdmin("0");
-                        Toast.makeText(getApplicationContext(), "Еhe user is not an admin", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getApplicationContext(), "Користувач більше не адмін", Toast.LENGTH_SHORT).show();
                     }
                     snapshot1.getRef().setValue(user);
                 }
